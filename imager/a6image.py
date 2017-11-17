@@ -6,8 +6,8 @@ be modified.  This is the main class needed to display images in the viewer.
 
 Based on an original file by Dexter Kozen (dck10) and Walker White (wmw2)
 
-Author: Walker M. White (wmw2)
-Date:    October 20, 2017 (Python 3 Version)
+Erick Salvador Rocha (eis29) and Hamed Rabah (hr277)
+November 15th, 2017
 """
 import pixels   # So we can manipulate pixel data
 
@@ -261,6 +261,7 @@ class Image(object):
         
         NOTE: DO NOT enforce any preconditions.  List the pixel list handle this for you.
         """
+
         self._pixels[n] = pixel 
     
     # ADDITIONAL METHODS

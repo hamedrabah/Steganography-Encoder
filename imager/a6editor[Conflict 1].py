@@ -11,7 +11,6 @@ Author: Walker M. White (wmw2)
 Date:    October 20, 2017 (Python 3 Version)
 """
 import a6history
-import a6image
 
 
 class Editor(a6history.ImageHistory):
@@ -312,55 +311,21 @@ class Editor(a6history.ImageHistory):
         return list
         
 
-    def _ASCII_encode(self,thelist):
+    def _ASCII_encode(self,list):
         """
-        Takes a list with ASCII values and uses the helper function _encode_pixel
-        to hide each ASCII value in the current image starting at the first pixel
-        
-        Parameter thelist: a list with ASCII values
-        Precondition: thelist is a list with valid ASCII codes.
+        Uses a list
         """
-        assert self._is_ASCII(thelist)==True
-        
-        for x in range(len(thelist)):
-            value=thelist[x]
+        for x in range(len(list)):
+            value=list[x]
             self._encode_pixel(x,value)
-            
-            
-    def _is_ASCII(self,thelist):
-        """
-        Returns: True if every element of a list is a possible ASCII value.
-        Otherwise it returns False.
-        
-        Takes a list of values and determines if each values is a possible
-        ASCII value.
-        
-        Parameter thelist: a list of integers
-        Precondition: thelist is a list
-        """
-        
-        assert isinstance(thelist,list)
-        
-        for x in thelist:
-            if not isinstance(x,int):
-                return False
-            if not (0<=x <=255):
-                return False
-            else:
-                return True
-            
-        
+    
     def decode(self):
         """
         Returns: The secret message stored in the current image. If no message
         is detected, it returns None
                         
         This method draws a ASCII code and converts each value to its character
-        representation and returns a string of the resulting text.
-        
-        To detect if there is a hidden message, it transforms the image
-        into a list of ASCII values uses the helper function
-        _isMarker.
+        representation and returns a string of the resulting text. 
         """
         current=self.getCurrent()
         message_code=self._pixels_to_ASCII(current)
@@ -377,10 +342,10 @@ class Editor(a6history.ImageHistory):
         return self._translate_ASCII(text_code)
     
     
-    def _isMarker(self,thelist):
+    def _isMarker(self,list):
         """
-        Returns: True if a given list contains possible ASCII values with
-        a valid marker for a hidden message.
+        Takes list of ASCII values and returns true if there is a marker
+        for a hidden message.
         
         A marker of a hidden message starts in the first pixel,
         it contains the following parts:
@@ -391,26 +356,21 @@ class Editor(a6history.ImageHistory):
         Ex. If the hidden message is 876,557 characters long the marker is:
                 }~876557~{
                 
-        This method uses helper function _is_ASCII to determine if the given
-        list is a list with possible ASCII values. It also uses helper function
-        _translate_ASCII to change the ASCII codes of the number part in the
-        marker to the character representation, and finally it uses helper
-        _Code_to_Int to determine if the given characters are a valid integer.
+        This method takes the ASCII code and converts each value to its character
+        representationa and returns true if there is a marker
         
-        Parameter thelist: A list with possible ASCII values 
-        Precondition: thelist is a list
+        Parameter list: A list of valid ASCII values 
+        Precondition: list is a list of ASCII values
         """
-        assert isinstance(thelist, list)
-        if self._is_ASCII(thelist)== False:
-            return False
-        marker1=thelist[:2]
+        
+        marker1=list[:2]
         if marker1!=[125,126]:
             return False
-        rest=thelist[2:]
+        rest=list[2:]
         pos=rest.index(126)+2
-        if thelist[pos+1]!=123:
+        if list[pos+1]!=123:
             return False
-        between=thelist[2:pos]
+        between=list[2:pos]
         if len(between)>6:
             return False
         number=self._translate_ASCII(between)
@@ -420,38 +380,37 @@ class Editor(a6history.ImageHistory):
             return True
         
     
-    def _getLengthCode(self,thelist):
+    def _getLengthCode(self,list):
         """
-        Returns: an integer
+        Takes a list of ascii values that contain a marker of hidden message
+        returns an int representing the lenght of the text
         
-        Takes a list of ASCII values that start with a marker of hidden message
-        returns an int representing the length of the text
+        This method draws a ASCII code and converts each value to its character
+        representationa and returns a string of the resulting text. 
         
-        This method uses the helper function _Code_to_Int to obtain the integer. 
-        
-        Parameter thelist: the list
-        Precondition: thelist is an list with valid ASCII values
+        Parameter list: the list
+        Precondition: list is an list
         """
-        assert isinstance(thelist, list)
-        assert self._is_ASCII(thelist)==True
-        rest=thelist[2:]
+        
+        rest=list[2:]
         pos=rest.index(126)
-        thelist=rest[:pos]
-        string=self._translate_ASCII(thelist)
+        list=rest[:pos]
+        string=self._translate_ASCII(list)
         return self._Code_to_Int(string)
     
     
     def _Code_to_Int(self,string):
         """
-        Returns: an integer of a string
-        
-        This method takes a string and returns an integer if the string is an integer,
+        Takes a string and returns an integer if the string is an integer,
         otherwise returns false
+        
+        This method draws a ASCII code and converts each value to its character
+        representationa and returns a string of the resulting text. 
         
         Parameter string: the string
         Precondition: string is an string
         """
-        assert isinstance(string, str)
+        
         try:
             return int(string)
         except ValueError:
@@ -460,16 +419,17 @@ class Editor(a6history.ImageHistory):
         
     def _pixels_to_ASCII(self,image):
         """
-        Takes image and returns list with hidden numbers in each pixel.
+        Takes image and returns list with ASCII codes hidden in each pixel
         
-        This method uses helper fucntion _decode_pixel to obtain
-        possible ASCII codes in each pixel.
+        This method draws a ASCII code and converts each value to its character
+        representationa and returns a string of the resulting text. 
         
-        Parameter image: the image to obtain hidden values
-        Precondition: image is an image object
+        Parameter image: the image
+        Precondition: image is an image
+        
+        
+        FIXXXXX THISSSSS ONE
         """
-        assert isinstance(image,a6image.Image)
-        
         length=image.getLength()
         list=[]
         for x in range(length):
@@ -485,10 +445,9 @@ class Editor(a6history.ImageHistory):
         representationa and returns a string of the resulting text. 
         
         Parameter code: the ASCII values to convert to characters
-        Precondition: code is a list that consists of ASCII values which are 3 digit ints
+        Precondition: code consists of ASCII values which are 3 digit ints
         """
-        assert isinstance(code,list)
-        assert self._is_ASCII(code)==True
+        assert isinstance(code,int)
         
         string=''
         for x in code:
@@ -513,9 +472,6 @@ class Editor(a6history.ImageHistory):
         Parameter pixel: The pixel color to use
         Precondition: pixel is a 3-element tuple (r,g,b) where each value is 0..255
         """
-        assert isinstance(row, int)
-        assert isinstance(pixel, tuple)
-        
         current = self.getCurrent()
         for col in range(current.getWidth()):
             current.setPixel(row,   col, pixel)
@@ -536,9 +492,6 @@ class Editor(a6history.ImageHistory):
         Parameter pixel: The pixel color to use
         Precondition: pixel is a 3-element tuple (r,g,b) where each value is 0..255
         """
-        assert isinstance(col, int)
-        assert isinstance(pixel, tuple)
-        
         current = self.getCurrent()
         for row in range(current.getHeight()):
             current.setPixel(row, col, pixel)
@@ -556,8 +509,6 @@ class Editor(a6history.ImageHistory):
         Parameter pos: a pixel position
         Precondition: pos is an int with  0 <= p < image length (as a 1d list)
         """
-        assert isinstance(pos, int)
-        
         rgb = self.getCurrent().getFlatPixel(pos)
         red   = rgb[0]
         green = rgb[1]
@@ -586,10 +537,8 @@ class Editor(a6history.ImageHistory):
         Precondition: ASCII is an int with 0 <= ASCII <=255
         """
         assert isinstance(ASCII,int)
-        assert isinstance(pos, int)
         assert 0<= ASCII
         assert ASCII <= 255
-        
         a=ASCII//100
         b=(ASCII//10)%10
         c=ASCII%10
@@ -617,30 +566,14 @@ class Editor(a6history.ImageHistory):
 
     def _avgRGB(self, current,x,y,step):
         """
-        The average of each color in an list of pixels
+        Given an image and a row and column of a pixel, it gives back he average of each color in 
         
         Averaging is exactly what it sounds like. You sum up all the red values
-        and divide them by the number of pixels.
-        You do the same for the green and blue values.
+        and divide them by the number of pixels. You do the same for the green and blue values.
         
-        Parameter current: the current image object
-        Precondition: current is a valid image object
-
-        Parameter x: the row position of the first pixel to be modified
-        Precondition: x is an int
-        
-        Parameter y: the column position of the first pixel to be modified
-        Precondition: y is an int
-        
-        Parameter step: the amount of pixels to the right and down to be modified
-        Precondition: step is an int
-        
+        Parameter data: a list of pixels
+        Precondition: data is a RGB list
         """
-        assert isinstance(current,a6image.Image)
-        assert isinstance(x,int)
-        assert isinstance(y,int)
-        assert isinstance(step,int)
-        
         red = 0
         green = 0
         blue = 0

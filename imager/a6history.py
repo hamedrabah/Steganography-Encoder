@@ -7,8 +7,8 @@ An edit history keeps track of all modifications of an original history.  It all
 
 Based on an original file by Dexter Kozen (dck10) and Walker White (wmw2)
 
-Author: Walker White (wmw2)
-Date:   October 20, 2017
+Erick Salvador Rocha (eis29) and Hamed Rabah (hr277)
+November 15th, 2017
 """
 import a6image
 
@@ -36,6 +36,7 @@ class ImageHistory(object):
         """
         Returns: The original image
         """
+        
         return self._original
     
     
@@ -43,6 +44,7 @@ class ImageHistory(object):
         """
         Returns: The most recent edit
         """
+
         return self._history[-1]
 
     
@@ -57,6 +59,7 @@ class ImageHistory(object):
         Parameter original: The image to edit
         Precondition: original is an Image object
         """
+
         self._original=original
         copy=original.copy()
         self._history = []
@@ -73,6 +76,7 @@ class ImageHistory(object):
         list can never be empty.  So in that case, it does not remove anything and
         returns False instead.
         """
+       
         if len(self._history) == 1:
             return False
         else:
@@ -87,6 +91,7 @@ class ImageHistory(object):
         When this method completes, the object should have the same values that it did
         when it was first initialized.
         """
+     
         
         del self._history[:]
         copyoriginal = self._original.copy()
@@ -103,6 +108,8 @@ class ImageHistory(object):
         MAX_HISTORY), this method deletes the oldest edit to ensure the invariant is 
         satisfied.
         """
+       
+        
         last = self.getCurrent()
         new=last.copy()
         
